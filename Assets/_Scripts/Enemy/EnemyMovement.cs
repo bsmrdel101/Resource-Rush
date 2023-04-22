@@ -11,7 +11,7 @@ public class EnemyMovement : MonoBehaviour
 {
     [Header("Movement")]
     [SerializeField] private float moveSpeed = 4f;
-    private EnemyBehavior behavior = EnemyBehavior.AttackResource;
+    public EnemyBehavior Behavior = EnemyBehavior.AttackResource;
 
     [Header("References")]
     private Transform _playerTransform;
@@ -24,7 +24,13 @@ public class EnemyMovement : MonoBehaviour
 
     private void Update()
     {
-        if (behavior == EnemyBehavior.AttackPlayer)
+        // If player gets too far away, then attack resource again
+        if (Vector3.Distance(transform.position, _playerTransform.position) > 7)
+        {
+            Behavior = EnemyBehavior.AttackResource;
+        }
+
+        if (Behavior == EnemyBehavior.AttackPlayer)
             MoveToPlayer();
         else
             MoveToNearestResource();
@@ -40,6 +46,13 @@ public class EnemyMovement : MonoBehaviour
     private void MoveToNearestResource()
     {
         Vector3 resourcePos = GetNearestResourcePos();
+
+        // If player is closer than the nearest resource, then attack the player instead
+        if (Vector3.Distance(transform.position, _playerTransform.position) < Vector3.Distance(transform.position, resourcePos))
+        {
+            Behavior = EnemyBehavior.AttackPlayer;
+        }
+
         float speed = moveSpeed * Time.deltaTime;
         transform.position = Vector3.MoveTowards(transform.position, resourcePos, speed);
     }

@@ -99,7 +99,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   resourceType: 1
-  resourceAmount: 0
+  resourceAmount: 8
 --- !u!61 &1144535244209135805
 BoxCollider2D:
   m_ObjectHideFlags: 0
