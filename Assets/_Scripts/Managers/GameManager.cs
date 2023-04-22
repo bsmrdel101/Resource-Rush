@@ -10,9 +10,10 @@ public class GameManager : MonoBehaviour
     private List<Transform> _selectedResourceSpawnPoints = new List<Transform>();
 
     [Header("References")]
-    [SerializeField] private GameObject _OrePrefab;
-    [SerializeField] private GameObject _TreePrefab;
-    [SerializeField] private GameObject _FruitPrefab;
+    [SerializeField] private GameObject _orePrefab;
+    [SerializeField] private GameObject _treePrefab;
+    [SerializeField] private GameObject _fruitPrefab;
+    [SerializeField] private GameObject _enemyPrefab;
     [SerializeField] private Transform[] _resourceSpawns;
     [SerializeField] private Transform[] _enemySpawns;
 
@@ -20,6 +21,7 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         GenerateResources();
+        StartCoroutine(SpawnEnemies());
     }
 
     // Choose random positions and spawn resources on them
@@ -56,10 +58,22 @@ public class GameManager : MonoBehaviour
     {
         int randNum = (int)Random.Range(0, 3);
         if (randNum == 0)
-            return _OrePrefab;
+            return _orePrefab;
         else if (randNum == 1)
-            return _TreePrefab;
+            return _treePrefab;
         else
-            return _FruitPrefab;
+            return _fruitPrefab;
+    }
+
+
+    // Start spawning enemies
+    private IEnumerator SpawnEnemies()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(3f);
+            Transform randEnemySpawn = _enemySpawns[(int)Random.Range(0, _enemySpawns.Length - 1)];
+            Instantiate(_enemyPrefab, randEnemySpawn.position, Quaternion.identity);
+        }
     }
 }
